@@ -9,15 +9,16 @@ CONST
     VERSION_DATE = "2012/11/29";  (* does not include bug fix releases *)
     
 TYPE
-    Ihandle*      = POINTER TO LIMITED RECORD END;
+    Ihandle*      = POINTER TO LIMITED RECORD [untagged] END;
     IhandleList*  = ARRAY OF Ihandle;
     Istring*      = POINTER TO ARRAY [untagged] OF SHORTCHAR;
     IstringList*  = ARRAY OF Istring;    
     Ipointer*     = POINTER TO EXTENSIBLE RECORD END;
     IpointerList* = ARRAY OF Ipointer;
-	Icallback*    = PROCEDURE [ccall] (self: Ihandle);  
+    Icallback*    = INTEGER;  
     Iparamcb*     = PROCEDURE [ccall] (dialog: Ihandle; param_index: INTEGER; user_data: Ipointer);
-    
+    Inull*        = POINTER TO RECORD [untagged] END;    
+
 (* MAIN API *)
     
 PROCEDURE [ccall] Open*          ["IupOpen"         ] (VAR [nil] argc: INTEGER; VAR [nil] argv: POINTER TO IstringList): INTEGER;
@@ -143,29 +144,22 @@ PROCEDURE [ccall] SetClassDefaultAttribute* ["IupSetClassDefaultAttribute"] (cla
 PROCEDURE [ccall] ClassMatch*               ["IupClassMatch"              ] (ih: Ihandle; classname: Istring): INTEGER;     
 PROCEDURE [ccall] Create*                   ["IupCreate"                  ] (classname: Istring): Ihandle; 
 PROCEDURE [ccall] Createv*                  ["IupCreatev"                 ] (classname: Istring; params: IpointerList): Ihandle;  
-(*
-PROCEDURE [ccall] Createp*                  ["IupCreatep"                 ] (classname: Istring; first: Ipointer, ...): Ihandle;*)
+PROCEDURE [ccall] Createp*                  ["IupCreatep"                 ] (classname: Istring; first: Ipointer; null: Inull): Ihandle;
 
 (* ELEMENTS *)
 
 PROCEDURE [ccall] Fill*        ["IupFill"       ] (): Ihandle;  
 PROCEDURE [ccall] Radio*       ["IupRadio"      ] (child: Ihandle): Ihandle;   
-(*
-PROCEDURE [ccall] Vbox*        ["IupVbox"       ] (child: Ihandle, ...): Ihandle;*)
-PROCEDURE [ccall] Vboxv*       ["IupVboxv"      ] (children: IhandleList): Ihandle;
-(*   
-PROCEDURE [ccall] Zbox*        ["IupZbox"       ] (child: Ihandle, ...): Ihandle;*)
-PROCEDURE [ccall] Zboxv*       ["IupZboxv"      ] (children: IhandleList): Ihandle;
-(*   
-PROCEDURE [ccall] Hbox*        ["IupHbox"       ] (child: Ihandle, ...): Ihandle;*)  
+PROCEDURE [ccall] Vbox*        ["IupVbox"       ] (child: Ihandle; null: Inull): Ihandle;
+PROCEDURE [ccall] Vboxv*       ["IupVboxv"      ] (children: IhandleList): Ihandle;  
+PROCEDURE [ccall] Zbox*        ["IupZbox"       ] (child: Ihandle; null: Inull): Ihandle;
+PROCEDURE [ccall] Zboxv*       ["IupZboxv"      ] (children: IhandleList): Ihandle; 
+PROCEDURE [ccall] Hbox*        ["IupHbox"       ] (child: Ihandle; null: Inull): Ihandle;  
 PROCEDURE [ccall] Hboxv*       ["IupHboxv"      ] (children: IhandleList): Ihandle;
-
-(*
-PROCEDURE [ccall] Normalizer*  ["IupNormalizer" ] (ih_first: Ihandle, ...): Ihandle;*)        
+PROCEDURE [ccall] Normalizer*  ["IupNormalizer" ] (ih_first: Ihandle; null: Inull): Ihandle;        
 PROCEDURE [ccall] Normalizerv* ["IupNormalizerv"] (ih_list: IhandleList): Ihandle;
 
-(*
-PROCEDURE [ccall] Cbox*        ["IupCbox"       ] (child: Ihandle, ...): Ihandle;*)  
+PROCEDURE [ccall] Cbox*        ["IupCbox"       ] (child: Ihandle; null: Inull): Ihandle;  
 PROCEDURE [ccall] Cboxv*       ["IupCboxv"      ] (children: IhandleList): Ihandle;
 PROCEDURE [ccall] Sbox*        ["IupSbox"       ] (child: Ihandle): Ihandle;  
 PROCEDURE [ccall] Split*       ["IupSplit"      ] (child1, child2: Ihandle): Ihandle;   
@@ -180,8 +174,7 @@ PROCEDURE [ccall] ImageRGBA*   ["IupImageRGBA"  ] (width, height: INTEGER; pixma
 PROCEDURE [ccall] Item*        ["IupItem"       ] (title, action: Istring): Ihandle;  
 PROCEDURE [ccall] Submenu*     ["IupSubmenu"    ] (title: Istring; child: Ihandle): Ihandle;     
 PROCEDURE [ccall] Separator*   ["IupSeparator"  ] (): Ihandle;       
-(*
-PROCEDURE [ccall] Menu*        ["IupMenu"       ] (child: Ihandle, ...): Ihandle;*)
+PROCEDURE [ccall] Menu*        ["IupMenu"       ] (child: Ihandle; null: Inull): Ihandle;
 PROCEDURE [ccall] Menuv*       ["IupMenuv"      ] (children: IhandleList): Ihandle;
 
 PROCEDURE [ccall] Button*      ["IupButton"     ] (title, action: Istring): Ihandle;    
@@ -197,8 +190,7 @@ PROCEDURE [ccall] Timer*       ["IupTimer"      ] (): Ihandle;
 PROCEDURE [ccall] Clipboard*   ["IupClipboard"  ] (): Ihandle;       
 PROCEDURE [ccall] ProgressBar* ["IupProgressBar"] (): Ihandle;         
 PROCEDURE [ccall] Val*         ["IupVal"        ] (type: Istring): Ihandle; 
-(*
-PROCEDURE [ccall] Tabs*        ["IupTabs"       ] (child: Ihandle, ...): Ihandle;*)
+PROCEDURE [ccall] Tabs*        ["IupTabs"       ] (child: Ihandle; null: Inull): Ihandle;
 PROCEDURE [ccall] Tabsv*       ["IupTabsv"      ] (children: IhandleList): Ihandle;   
 PROCEDURE [ccall] Tree*        ["IupTree"       ] (): Ihandle;
 
