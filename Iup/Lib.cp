@@ -75,17 +75,17 @@ PROCEDURE [ccall] Unmap*  ["IupUnmap" ] (ih: Ihandle);
 
 PROCEDURE [ccall] SetAttribute*   ["IupSetAttribute"  ] (ih: Ihandle; name, value: Istring);         
 PROCEDURE [ccall] StoreAttribute* ["IupStoreAttribute"] (ih: Ihandle; name, value: Istring);         
-PROCEDURE [ccall] SetAttributes*  ["IupSetAttributes" ] (ih: Ihandle; str:  Istring);          
-PROCEDURE [ccall] GetAttribute*   ["IupGetAttribute"  ] (ih: Ihandle; name: Istring);          
-PROCEDURE [ccall] GetAttributes*  ["IupGetAttributes" ] (ih: Ihandle);          
-PROCEDURE [ccall] GetInt*         ["IupGetInt"        ] (ih: Ihandle; name: Istring);  
-PROCEDURE [ccall] GetInt2*        ["IupGetInt2"       ] (ih: Ihandle; name: Istring);      
-PROCEDURE [ccall] GetIntInt*      ["IupGetIntInt"     ] (ih: Ihandle; name: Istring; i1, i2: INTEGER);      
-PROCEDURE [ccall] GetFloat*       ["IupGetFloat"      ] (ih: Ihandle; name: Istring);      
+PROCEDURE [ccall] SetAttributes*  ["IupSetAttributes" ] (ih: Ihandle; str:  Istring): Ihandle;          
+PROCEDURE [ccall] GetAttribute*   ["IupGetAttribute"  ] (ih: Ihandle; name: Istring): Istring;          
+PROCEDURE [ccall] GetAttributes*  ["IupGetAttributes" ] (ih: Ihandle): Istring;          
+PROCEDURE [ccall] GetInt*         ["IupGetInt"        ] (ih: Ihandle; name: Istring): INTEGER;  
+PROCEDURE [ccall] GetInt2*        ["IupGetInt2"       ] (ih: Ihandle; name: Istring): INTEGER;      
+PROCEDURE [ccall] GetIntInt*      ["IupGetIntInt"     ] (ih: Ihandle; name: Istring; i1, i2: INTEGER): INTEGER;      
+PROCEDURE [ccall] GetFloat*       ["IupGetFloat"      ] (ih: Ihandle; name: Istring): SHORTREAL;      
 (*
 PROCEDURE [ccall] SetfAttribute*    ["IupSetfAttribute"   ] (ih: Ihandle; name, format: Istring; ...);*)
 PROCEDURE [ccall] ResetAttribute*   ["IupResetAttribute"  ] (ih: Ihandle; name: Istring);          
-PROCEDURE [ccall] GetAllAttributes* ["IupGetAllAttributes"] (ih: Ihandle; names: IstringList; n: INTEGER);
+PROCEDURE [ccall] GetAllAttributes* ["IupGetAllAttributes"] (ih: Ihandle; names: IstringList; n: INTEGER): INTEGER;
 (*
 PROCEDURE [ccall] SetAtt*           ["IupSetAtt"          ] (handle_name: Istring; ih: Ihandle; name: Istring; ...): Ihandle;*)
 
