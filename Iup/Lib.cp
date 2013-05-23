@@ -6,88 +6,88 @@
 MODULE IupLib ["iup"];
 
 CONST
-    NAME = "IUP - Portable User Interface";
-    COPYRIGHT = "Copyright (C) 1994-2013 Tecgraf, PUC-Rio.";
-    DESCRIPTION = "Multi-platform toolkit for building graphical user interfaces.";
-    VERSION = "3.8";
-    VERSION_NUMBER = 308000;
-    VERSION_DATE = "2013/05/08";
+    NAME* = "IUP - Portable User Interface";
+    COPYRIGHT* = "Copyright (C) 1994-2013 Tecgraf, PUC-Rio.";
+    DESCRIPTION* = "Multi-platform toolkit for building graphical user interfaces.";
+    VERSION* = "3.8";
+    VERSION_NUMBER* = 308000;
+    VERSION_DATE* = "2013/05/08";
     
     (* Common Return Values *)
 
-    ERROR    =  1;
-    NOERROR  =  0;
-    OPENED   = -1;
-    INVALID  = -1;
+    ERROR*    =  1;
+    NOERROR*  =  0;
+    OPENED*   = -1;
+    INVALID*  = -1;
 
     (* Callback Return Values *)
 
-    IGNORE    = -1;
-    DEFAULT   = -2;
-    CLOSE_    = -3;
-    CONTINUE  = -4;
+    IGNORE*    = -1;
+    DEFAULT*   = -2;
+    CLOSE_*    = -3;
+    CONTINUE*  = -4;
 
     (* IupPopup and IupShowXY Parameter Values *)
 
-    CENTER        = 0FFFFH;  (* 65535 *)
-    LEFT          = 0FFFEH;  (* 65534 *)
-    RIGHT         = 0FFFDH;  (* 65533 *)
-    MOUSEPOS      = 0FFFCH;  (* 65532 *)
-    CURRENT       = 0FFFBH;  (* 65531 *)
-    CENTERPARENT  = 0FFFAH;  (* 65530 *)
-    TOP           = LEFT  ;
-    BOTTOM        = RIGHT ;
+    CENTER*        = 0FFFFH;  (* 65535 *)
+    LEFT*          = 0FFFEH;  (* 65534 *)
+    RIGHT*         = 0FFFDH;  (* 65533 *)
+    MOUSEPOS*      = 0FFFCH;  (* 65532 *)
+    CURRENT*       = 0FFFBH;  (* 65531 *)
+    CENTERPARENT*  = 0FFFAH;  (* 65530 *)
+    TOP*           = LEFT  ;
+    BOTTOM*        = RIGHT ;
 
     (* SHOW_CB Callback Values *)
 
-    SHOW     = 0;
-    RESTORE  = 1;
-    MINIMIZE = 2;
-    MAXIMIZE = 3;
-    HIDE     = 4;
+    SHOW*     = 0;
+    RESTORE*  = 1;
+    MINIMIZE* = 2;
+    MAXIMIZE* = 3;
+    HIDE*     = 4;
 
     (* SCROLL_CB Callback Values *)
 
-    SBUP      =  0;
-    SBDN      =  1;
-    SBPGUP    =  2;
-    SBPGDN    =  3;
-    SBPOSV    =  4;
-    SBDRAGV   =  5;
-    SBLEFT    =  6;
-    SBRIGHT   =  7;
-    SBPGLEFT  =  8;
-    SBPGRIGHT =  9;
-    SBPOSH    = 10;
-    SBDRAGH   = 11;
+    SBUP*      =  0;
+    SBDN*      =  1;
+    SBPGUP*    =  2;
+    SBPGDN*    =  3;
+    SBPOSV*    =  4;
+    SBDRAGV*   =  5;
+    SBLEFT*    =  6;
+    SBRIGHT*   =  7;
+    SBPGLEFT*  =  8;
+    SBPGRIGHT* =  9;
+    SBPOSH*    = 10;
+    SBDRAGH*   = 11;
 
     (* Mouse Button Values and Macros *)
 
-    BUTTON1 = '1';
-    BUTTON2 = '2';
-    BUTTON3 = '3';
-    BUTTON4 = '4';
-    BUTTON5 = '5';
+    BUTTON1* = '1';
+    BUTTON2* = '2';
+    BUTTON3* = '3';
+    BUTTON4* = '4';
+    BUTTON5* = '5';
 
     (* Pre-Defined Masks *)
 
-    MASK_FLOAT  = "[+/-]?(/d+/.?/d*|/./d+)";
-    MASK_UFLOAT = "(/d+/.?/d*|/./d+)";
-    MASK_EFLOAT = "[+/-]?(/d+/.?/d*|/./d+)([eE][+/-]?/d+)?";
-    MASK_INT    = "[+/-]?/d+";
-    MASK_UINT   = "/d+";
+    MASK_FLOAT*  = "[+/-]?(/d+/.?/d*|/./d+)";
+    MASK_UFLOAT* = "(/d+/.?/d*|/./d+)";
+    MASK_EFLOAT* = "[+/-]?(/d+/.?/d*|/./d+)([eE][+/-]?/d+)?";
+    MASK_INT*    = "[+/-]?/d+";
+    MASK_UINT*   = "/d+";
 
     (* IupGetParam Callback situations *)
 
-    GETPARAM_OK     = -1;
-    GETPARAM_INIT   = -2;
-    GETPARAM_CANCEL = -3;
-    GETPARAM_HELP   = -4;
+    GETPARAM_OK*     = -1;
+    GETPARAM_INIT*   = -2;
+    GETPARAM_CANCEL* = -3;
+    GETPARAM_HELP*   = -4;
 
     (* Record Input Modes *)
 
-    RECBINARY = 0;
-    RECTEXT   = 1;
+    RECBINARY* = 0;
+    RECTEXT*   = 1;
 
 TYPE
     Handle*      = POINTER TO LIMITED RECORD [untagged] END;
