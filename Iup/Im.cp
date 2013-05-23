@@ -1,4 +1,4 @@
-MODULE IupIm ["im"];
+MODULE IupIm ["iupim"];
 IMPORT Iup := IupLib, Im := ImLib;
 
 PROCEDURE [ccall] LoadImage* ["IupLoadImage"] (file_name: Iup.String): Iup.Handle;
