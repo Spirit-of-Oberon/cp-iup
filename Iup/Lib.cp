@@ -7,11 +7,11 @@ MODULE IupLib ["iup"];
 
 CONST
     NAME = "IUP - Portable User Interface";
-    COPYRIGHT = "Copyright (C) 1994-2012 Tecgraf, PUC-Rio.";
+    COPYRIGHT = "Copyright (C) 1994-2013 Tecgraf, PUC-Rio.";
     DESCRIPTION = "Multi-platform toolkit for building graphical user interfaces.";
-    VERSION = "3.7";
-    VERSION_NUMBER = 307000;
-    VERSION_DATE = "2012/11/29";
+    VERSION = "3.8";
+    VERSION_NUMBER = 308000;
+    VERSION_DATE = "2013/05/08";
     
     (* Common Return Values *)
 
@@ -245,6 +245,9 @@ PROCEDURE [ccall] Cboxv*       ["IupCboxv"      ] (children: HandleList): Handle
 PROCEDURE [ccall] Sbox*        ["IupSbox"       ] (child: Handle): Handle;  
 PROCEDURE [ccall] Split*       ["IupSplit"      ] (child1, child2: Handle): Handle;   
 PROCEDURE [ccall] ScrollBox*   ["IupScrollBox"  ] (child: Handle): Handle; 
+PROCEDURE [ccall] GridBox*     ["IupGridBox"    ] (child: Handle; null: Null): Handle; 
+PROCEDURE [ccall] GridBoxv*    ["IupGridBoxv"   ] (children: HandleList): Handle;
+PROCEDURE [ccall] Expander*    ["IupExpander"   ] (child: Handle): Handle;
       
 PROCEDURE [ccall] Frame*       ["IupFrame"      ] (child: Handle): Handle;
 
@@ -274,19 +277,20 @@ PROCEDURE [ccall] Val*         ["IupVal"        ] (type: String): Handle;
 PROCEDURE [ccall] Tabs*        ["IupTabs"       ] (child: Handle; null: Null): Handle;
 PROCEDURE [ccall] Tabsv*       ["IupTabsv"      ] (children: HandleList): Handle;   
 PROCEDURE [ccall] Tree*        ["IupTree"       ] (): Handle;
+PROCEDURE [ccall] Link*        ["IupLink"       ] (url, title: String): Handle;
 
-(* Deprecated controls use SPIN attribute of IupText *)
+(* Deprecated controls, use SPIN attribute of IupText *)
 PROCEDURE [ccall] Spin*    ["IupSpin"   ] (): Handle;
 PROCEDURE [ccall] Spinbox* ["IupSpinbox"] (child: Handle): Handle;
 
 (* IupImage utility *)
 PROCEDURE [ccall] SaveImageAsText* ["IupSaveImageAsText"] (ih: Handle; file_name, format, name: String): INTEGER;
 
-(* IupText utilities *)
+(* IupText and IupScintilla utilities *)
 PROCEDURE [ccall] TextConvertLinColToPos* ["IupTextConvertLinColToPos"] (ih: Handle; lin, col: INTEGER; OUT pos: INTEGER);
 PROCEDURE [ccall] TextConvertPosToLinCol* ["IupTextConvertPosToLinCol"] (ih: Handle; pos: INTEGER; OUT lin, col: INTEGER);
 
-(* IupText, IupList and IupTree utility *)
+(* IupText, IupList, IupTree, IupMatrix and IupScintilla utility *)
 PROCEDURE [ccall] ConvertXYToPos* ["IupConvertXYToPos"] (ih: Handle; x, y: INTEGER): INTEGER;
 
 (* IupTree utilities *)
