@@ -1,6 +1,6 @@
 MODULE IupCd ["iupcd"];
 IMPORT IupLib, Cd := CdLib;
 
-PROCEDURE [ccall] ContextIup* ["cdContextIup"] (): Cd.Context;
+PROCEDURE [ccall] Context* ["cdContextIup"] (): Cd.Context;
 
 END IupCd.
