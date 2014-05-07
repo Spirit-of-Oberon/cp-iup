@@ -14,6 +14,7 @@ PROCEDURE [ccall] InsertPoints*    ["IupPPlotInsertPoints"   ] (ih: Iup.Handle; 
 PROCEDURE [ccall] AddPoints*       ["IupPPlotAddPoints"      ] (ih: Iup.Handle; index: INTEGER; VAR x, y: SHORTREAL; count: INTEGER);
 PROCEDURE [ccall] AddStrPoints*    ["IupPPlotAddStrPoints"   ] (ih: Iup.Handle; index: INTEGER; x: Iup.StringList; VAR y: SHORTREAL; count: INTEGER);
 PROCEDURE [ccall] Transform*       ["IupPPlotTransform"      ] (ih: Iup.Handle; x, y: SHORTREAL; VAR ix, iy: INTEGER);
+PROCEDURE [ccall] TransformTo*     ["IupPPlotTransformTo"    ] (ih: Iup.Handle; x, y: INTEGER; VAR rx, ry: SHORTREAL);
 PROCEDURE [ccall] PaintTo*         ["IupPPlotPaintTo"        ] (ih: Iup.Handle; cnv: Iup.Pointer);
 
 END IupPPlot.

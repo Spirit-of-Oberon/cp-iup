@@ -7,18 +7,19 @@ MODULE IupLib ["iup"];
 
 CONST
     NAME* = "IUP - Portable User Interface";
-    COPYRIGHT* = "Copyright (C) 1994-2013 Tecgraf, PUC-Rio.";
+    COPYRIGHT* = "Copyright (C) 1994-2014 Tecgraf, PUC-Rio.";
     DESCRIPTION* = "Multi-platform toolkit for building graphical user interfaces.";
-    VERSION* = "3.8";
-    VERSION_NUMBER* = 308000;
-    VERSION_DATE* = "2013/05/08";
+    VERSION* = "3.10";
+    VERSION_NUMBER* = 310000;
+    VERSION_DATE* = "2014/01/17";
     
     (* Common Return Values *)
 
-    ERROR*    =  1;
-    NOERROR*  =  0;
-    OPENED*   = -1;
-    INVALID*  = -1;
+    ERROR*      =   1;
+    NOERROR*    =   0;
+    OPENED*     =  -1;
+    INVALID*    =  -1;
+    INVALID_ID* = -10;
 
     (* Callback Return Values *)
 
@@ -121,8 +122,6 @@ PROCEDURE [ccall] Redraw*          ["IupRedraw"         ] (ih: Handle; children:
 PROCEDURE [ccall] Refresh*         ["IupRefresh"        ] (ih: Handle);
 PROCEDURE [ccall] RefreshChildren* ["IupRefreshChildren"] (ih: Handle);
 
-PROCEDURE [ccall] MapFont*    ["IupMapFont"   ] (iupfont:    String): String;
-PROCEDURE [ccall] UnMapFont*  ["IupUnMapFont" ] (driverfont: String): String;
 PROCEDURE [ccall] Help*       ["IupHelp"      ] (url:        String): INTEGER;
 PROCEDURE [ccall] Load*       ["IupLoad"      ] (filename:   String): String;
 PROCEDURE [ccall] LoadBuffer* ["IupLoadBuffer"] (buffer:      String): String;
@@ -130,8 +129,13 @@ PROCEDURE [ccall] LoadBuffer* ["IupLoadBuffer"] (buffer:      String): String;
 PROCEDURE [ccall] Version*       ["IupVersion"      ] (): String;
 PROCEDURE [ccall] VersionDate*   ["IupVersionDate"  ] (): String;
 PROCEDURE [ccall] VersionNumber* ["IupVersionNumber"] (): INTEGER;
+
 PROCEDURE [ccall] SetLanguage*   ["IupSetLanguage"  ] (lng: String);
 PROCEDURE [ccall] GetLanguage*   ["IupGetLanguage"  ] (): String;
+PROCEDURE [ccall] SetLanguageString*   ["IupSetLanguageString"  ] (name, str: String);
+PROCEDURE [ccall] StoreLanguageString* ["IupStoreLanguageString"] (name, str: String);
+PROCEDURE [ccall] GetLanguageString*   ["IupGetLanguageString"  ] (name: String): String;
+PROCEDURE [ccall] SetLanguagePack*     ["IupSetLanguagePack"    ] (ih:   Handle);
 
 PROCEDURE [ccall] Destroy*        ["IupDestroy"       ] (ih:    Handle);   
 PROCEDURE [ccall] Detach*         ["IupDetach"        ] (child: Handle);
@@ -154,41 +158,57 @@ PROCEDURE [ccall] Hide*   ["IupHide"  ] (ih: Handle): INTEGER;
 PROCEDURE [ccall] Map*    ["IupMap"   ] (ih: Handle): INTEGER;
 PROCEDURE [ccall] Unmap*  ["IupUnmap" ] (ih: Handle);
 
-PROCEDURE [ccall] SetAttribute*   ["IupSetAttribute"  ] (ih: Handle; name, value: String);         
-PROCEDURE [ccall] StoreAttribute* ["IupStoreAttribute"] (ih: Handle; name, value: String);         
-PROCEDURE [ccall] SetAttributes*  ["IupSetAttributes" ] (ih: Handle; str:  String): Handle;          
-PROCEDURE [ccall] GetAttribute*   ["IupGetAttribute"  ] (ih: Handle; name: String): String;          
-PROCEDURE [ccall] GetAttributes*  ["IupGetAttributes" ] (ih: Handle): String;          
-PROCEDURE [ccall] GetInt*         ["IupGetInt"        ] (ih: Handle; name: String): INTEGER;  
-PROCEDURE [ccall] GetInt2*        ["IupGetInt2"       ] (ih: Handle; name: String): INTEGER;      
-PROCEDURE [ccall] GetIntInt*      ["IupGetIntInt"     ] (ih: Handle; name: String; i1, i2: INTEGER): INTEGER;      
-PROCEDURE [ccall] GetFloat*       ["IupGetFloat"      ] (ih: Handle; name: String): SHORTREAL;      
-(*
-PROCEDURE [ccall] SetfAttribute*    ["IupSetfAttribute"   ] (ih: Handle; name, format: String; ...);*)
 PROCEDURE [ccall] ResetAttribute*   ["IupResetAttribute"  ] (ih: Handle; name: String);          
 PROCEDURE [ccall] GetAllAttributes* ["IupGetAllAttributes"] (ih: Handle; names: StringList; n: INTEGER): INTEGER;
 (*
-PROCEDURE [ccall] SetAtt*           ["IupSetAtt"          ] (handle_name: String; ih: Handle; name: String; ...): Handle;*)
+PROCEDURE [ccall] SetAtt*         ["IupSetAtt"] (handle_name: String; ih: Handle; name: String; ...): Handle;*)
+PROCEDURE [ccall] SetAttributes*  ["IupSetAttributes"] (ih: Handle; str:  String): Handle;
+PROCEDURE [ccall] GetAttributes*  ["IupGetAttributes"] (ih: Handle): String;
 
-PROCEDURE [ccall] SetAttributeId*    ["IupSetAttributeId"   ] (ih: Handle; name: String; id: INTEGER; value: String);     
-PROCEDURE [ccall] StoreAttributeId*  ["IupStoreAttributeId" ] (ih: Handle; name: String; id: INTEGER; value: String);         
-PROCEDURE [ccall] GetAttributeId*    ["IupGetAttributeId"   ] (ih: Handle; name: String; id: INTEGER);     
-PROCEDURE [ccall] GetFloatId*        ["IupGetFloatId"       ] (ih: Handle; name: String; id: INTEGER); 
-PROCEDURE [ccall] GetIntId*          ["IupGetIntId"         ] (ih: Handle; name: String; id: INTEGER); 
+PROCEDURE [ccall] SetAttribute*    ["IupSetAttribute"   ] (ih: Handle; name, value: String);
+PROCEDURE [ccall] SetStrAttribute* ["IupSetStrAttribute"] (ih: Handle; name, value: String);
 (*
-PROCEDURE [ccall] SetfAttributeId*   ["IupSetfAttributeId"  ] (ih: Handle; name: String; id: INTEGER; format: String; ...);*)
+PROCEDURE [ccall] SetStrf*  ["IupSetStrf" ] (ih: Handle; name, format: String; ...);*)
+PROCEDURE [ccall] SetInt*   ["IupSetInt"  ] (ih: Handle; name: String; value: INTEGER);
+PROCEDURE [ccall] SetFloat* ["IupSetFloat"] (ih: Handle; name: String; value: SHORTREAL);
+PROCEDURE [ccall] SetRGB*   ["IupSetRGB"  ] (ih: Handle; name: String; r, g, b: SHORTCHAR);
 
-PROCEDURE [ccall] SetAttributeId2*   ["IupSetAttributeId2"  ] (ih: Handle; name: String; lin, col: INTEGER; value: String);         
-PROCEDURE [ccall] StoreAttributeId2* ["IupStoreAttributeId2"] (ih: Handle; name: String; lin, col: INTEGER; value: String);         
-PROCEDURE [ccall] GetAttributeId2*   ["IupGetAttributeId2"  ] (ih: Handle; name: String; lin, col: INTEGER);         
-PROCEDURE [ccall] GetIntId2*         ["IupGetIntId2"        ] (ih: Handle; name: String; lin, col: INTEGER); 
-PROCEDURE [ccall] GetFloatId2*       ["IupGetFloatId2"      ] (ih: Handle; name: String; lin, col: INTEGER);     
+PROCEDURE [ccall] GetAttribute* ["IupGetAttribute"  ] (ih: Handle; name: String): String;
+PROCEDURE [ccall] GetInt*       ["IupGetInt"        ] (ih: Handle; name: String): INTEGER;  
+PROCEDURE [ccall] GetInt2*      ["IupGetInt2"       ] (ih: Handle; name: String): INTEGER;      
+PROCEDURE [ccall] GetIntInt*    ["IupGetIntInt"     ] (ih: Handle; name: String; i1, i2: INTEGER): INTEGER;      
+PROCEDURE [ccall] GetFloat*     ["IupGetFloat"      ] (ih: Handle; name: String): SHORTREAL; 
+PROCEDURE [ccall] GetRGB*       ["IupGetRGB"        ] (ih: Handle; name: String; VAR r, g, b: SHORTCHAR);
+
+PROCEDURE [ccall] SetAttributeId*    ["IupSetAttributeId"   ] (ih: Handle; name: String; id: INTEGER; value: String);
+PROCEDURE [ccall] SetStrAttributeId* ["IupSetStrAttributeId"] (ih: Handle; name: String; id: INTEGER; value: String);
 (*
-PROCEDURE [ccall] SetfAttributeId2*  ["IupSetfAttributeId2" ] (ih: Handle; name: String; lin, col: INTEGER; format: String; ...);*)
+PROCEDURE [ccall] SetStrfId*  ["IupSetStrfId" ] (ih: Handle; name: String; id: INTEGER; value: format; ...);*)
+PROCEDURE [ccall] SetIntId*   ["IupSetIntId"  ] (ih: Handle; name: String; id: INTEGER; value: INTEGER);
+PROCEDURE [ccall] SetFloatId* ["IupSetFloatId"] (ih: Handle; name: String; id: INTEGER; value: SHORTREAL);
+PROCEDURE [ccall] SetRGBId*   ["IupSetRGBId"  ] (ih: Handle; name: String; id: INTEGER; r, g, b: SHORTCHAR);
 
-PROCEDURE [ccall] SetGlobal*   ["IupSetGlobal"  ] (name, value: String);   
-PROCEDURE [ccall] StoreGlobal* ["IupStoreGlobal"] (name, value: String);       
-PROCEDURE [ccall] GetGlobal*   ["IupGetGlobal"  ] (name: String): String;
+PROCEDURE [ccall] GetAttributeId* ["IupGetAttributeId"] (ih: Handle; name: String; id: INTEGER);     
+PROCEDURE [ccall] GetIntId*       ["IupGetIntId"      ] (ih: Handle; name: String; id: INTEGER); 
+PROCEDURE [ccall] GetFloatId*     ["IupGetFloatId"    ] (ih: Handle; name: String; id: INTEGER); 
+PROCEDURE [ccall] GetRGBId*       ["IupGetRGBId"      ] (ih: Handle; name: String; id: INTEGER; VAR r, g, b: SHORTCHAR);
+
+PROCEDURE [ccall] SetAttributeId2*    ["IupSetAttributeId2"   ] (ih: Handle; name: String; lin, col: INTEGER; value: String);
+PROCEDURE [ccall] SetStrAttributeId2* ["IupSetStrAttributeId2"] (ih: Handle; name: String; lin, col: INTEGER; value: String);
+(*
+PROCEDURE [ccall] SetStrfId2*  ["IupSetStrfId2"  ] (ih: Handle; name: String; lin, col: INTEGER; value: format; ...);*)
+PROCEDURE [ccall] SetIntId2*   ["IupSetIntId2"   ] (ih: Handle; name: String; lin, col: INTEGER; value: INTEGER);
+PROCEDURE [ccall] SetFloatId2* ["IupSetFloatId2" ] (ih: Handle; name: String; lin, col: INTEGER; value: SHORTREAL);
+PROCEDURE [ccall] SetRGBId2*   ["IupSetRGBId2"   ] (ih: Handle; name: String; lin, col: INTEGER; r, g, b: SHORTCHAR);
+
+PROCEDURE [ccall] GetAttributeId2* ["IupGetAttributeId2"  ] (ih: Handle; name: String; lin, col: INTEGER);         
+PROCEDURE [ccall] GetIntId2*       ["IupGetIntId2"        ] (ih: Handle; name: String; lin, col: INTEGER); 
+PROCEDURE [ccall] GetFloatId2*     ["IupGetFloatId2"      ] (ih: Handle; name: String; lin, col: INTEGER);     
+PROCEDURE [ccall] GetRGBId2*       ["IupGetRGBId2"        ] (ih: Handle; name: String; lin, col: INTEGER; VAR r, g, b: SHORTCHAR);
+
+PROCEDURE [ccall] SetGlobal*    ["IupSetGlobal"  ] (name, value: String);   
+PROCEDURE [ccall] SetStrGlobal* ["IupSetStrGlobal"] (name, value: String);
+PROCEDURE [ccall] GetGlobal*    ["IupGetGlobal"  ] (name: String): String;
 
 PROCEDURE [ccall] SetFocus*      ["IupSetFocus"     ] (ih: Handle): Handle; 
 PROCEDURE [ccall] GetFocus*      ["IupGetFocus"     ] (): Handle; 
@@ -202,12 +222,11 @@ PROCEDURE [ccall] SetCallbacks*  ["IupSetCallbacks"] (ih: Handle; name: String; 
 
 PROCEDURE [ccall] GetFunction*   ["IupGetFunction"  ] (name: String): Callback;
 PROCEDURE [ccall] SetFunction*   ["IupSetFunction"  ] (name: String; func: Callback): Callback;
-PROCEDURE [ccall] GetActionName* ["IupGetActionName"] (): String;
 
 PROCEDURE [ccall] GetHandle*     ["IupGetHandle"    ] (name: String): Handle;  
 PROCEDURE [ccall] SetHandle*     ["IupSetHandle"    ] (name: String; ih: Handle): Handle;  
 PROCEDURE [ccall] GetAllNames*   ["IupGetAllNames"  ] (names: StringList; n: INTEGER): INTEGER;    
-PROCEDURE [ccall] GetAllDialogs* ["IupGetAllDialogs"] (names: String; n: INTEGER): INTEGER;
+PROCEDURE [ccall] GetAllDialogs* ["IupGetAllDialogs"] (names: StringList; n: INTEGER): INTEGER;
 PROCEDURE [ccall] GetName*       ["IupGetName"      ] (ih: Handle): String;
 
 PROCEDURE [ccall] SetAttributeHandle*       ["IupSetAttributeHandle"      ] (ih: Handle; name: String; ih_named: Handle);             
@@ -240,14 +259,16 @@ PROCEDURE [ccall] Hboxv*       ["IupHboxv"      ] (children: HandleList): Handle
 PROCEDURE [ccall] Normalizer*  ["IupNormalizer" ] (ih_first: Handle; null: Null): Handle;        
 PROCEDURE [ccall] Normalizerv* ["IupNormalizerv"] (ih_list: HandleList): Handle;
 
-PROCEDURE [ccall] Cbox*        ["IupCbox"       ] (child: Handle; null: Null): Handle;  
-PROCEDURE [ccall] Cboxv*       ["IupCboxv"      ] (children: HandleList): Handle;
-PROCEDURE [ccall] Sbox*        ["IupSbox"       ] (child: Handle): Handle;  
-PROCEDURE [ccall] Split*       ["IupSplit"      ] (child1, child2: Handle): Handle;   
-PROCEDURE [ccall] ScrollBox*   ["IupScrollBox"  ] (child: Handle): Handle; 
-PROCEDURE [ccall] GridBox*     ["IupGridBox"    ] (child: Handle; null: Null): Handle; 
-PROCEDURE [ccall] GridBoxv*    ["IupGridBoxv"   ] (children: HandleList): Handle;
-PROCEDURE [ccall] Expander*    ["IupExpander"   ] (child: Handle): Handle;
+PROCEDURE [ccall] Cbox*          ["IupCbox"         ] (child: Handle; null: Null): Handle;  
+PROCEDURE [ccall] Cboxv*         ["IupCboxv"        ] (children: HandleList): Handle;
+PROCEDURE [ccall] Sbox*          ["IupSbox"         ] (child: Handle): Handle;  
+PROCEDURE [ccall] Split*         ["IupSplit"        ] (child1, child2: Handle): Handle;   
+PROCEDURE [ccall] ScrollBox*     ["IupScrollBox"    ] (child: Handle): Handle; 
+PROCEDURE [ccall] GridBox*       ["IupGridBox"      ] (child: Handle; null: Null): Handle; 
+PROCEDURE [ccall] GridBoxv*      ["IupGridBoxv"     ] (children: HandleList): Handle;
+PROCEDURE [ccall] Expander*      ["IupExpander"     ] (child: Handle): Handle;
+PROCEDURE [ccall] DetachBox*     ["IupDetachBox"    ] (child: Handle): Handle;
+PROCEDURE [ccall] BackgroundBox* ["IupBackgroundBox"] (child: Handle): Handle;
       
 PROCEDURE [ccall] Frame*       ["IupFrame"      ] (child: Handle): Handle;
 
@@ -279,9 +300,11 @@ PROCEDURE [ccall] Tabsv*       ["IupTabsv"      ] (children: HandleList): Handle
 PROCEDURE [ccall] Tree*        ["IupTree"       ] (): Handle;
 PROCEDURE [ccall] Link*        ["IupLink"       ] (url, title: String): Handle;
 
-(* Deprecated controls, use SPIN attribute of IupText *)
+(* Old controls, use SPIN attribute of IupText *)
 PROCEDURE [ccall] Spin*    ["IupSpin"   ] (): Handle;
 PROCEDURE [ccall] Spinbox* ["IupSpinbox"] (child: Handle): Handle;
+
+(* UTILITIES *)
 
 (* IupImage utility *)
 PROCEDURE [ccall] SaveImageAsText* ["IupSaveImageAsText"] (ih: Handle; file_name, format, name: String): INTEGER;
@@ -293,27 +316,47 @@ PROCEDURE [ccall] TextConvertPosToLinCol* ["IupTextConvertPosToLinCol"] (ih: Han
 (* IupText, IupList, IupTree, IupMatrix and IupScintilla utility *)
 PROCEDURE [ccall] ConvertXYToPos* ["IupConvertXYToPos"] (ih: Handle; x, y: INTEGER): INTEGER;
 
+(* OLD names, kept for backward compatibility, will never be removed. *)
+PROCEDURE [ccall] StoreGlobal*    ["IupStoreGlobal"   ] (name, value: String);
+PROCEDURE [ccall] StoreAttribute* ["IupStoreAttribute"] (ih: Handle; name, value: String);
+(*
+PROCEDURE [ccall] SetfAttribute*     ["IupSetfAttribute"    ] (ih: Handle; name, format: String; ...);*)
+PROCEDURE [ccall] StoreAttributeId*  ["IupStoreAttributeId" ] (ih: Handle; name: String; id: INTEGER; value: String);
+(*
+PROCEDURE [ccall] SetfAttributeId*   ["IupSetfAttributeId"  ] (ih: Handle; name: String; id: INTEGER; format: String; ...);*)
+PROCEDURE [ccall] StoreAttributeId2* ["IupStoreAttributeId2"] (ih: Handle; name: String; lin, col: INTEGER; value: String);
+(*
+PROCEDURE [ccall] SetfAttributeId2*  ["IupSetfAttributeId2" ] (ih: Handle; name: String; lin, col: INTEGER; format: String; ...);*)
+
 (* IupTree utilities *)
 PROCEDURE [ccall] TreeSetUserId* ["IupTreeSetUserId"] (ih: Handle; id: INTEGER; userid: Pointer): INTEGER;
 PROCEDURE [ccall] TreeGetUserId* ["IupTreeGetUserId"] (ih: Handle; id: INTEGER): Pointer;
-PROCEDURE [ccall] TreeGetId* ["IupTreeGetId"] (ih: Handle; userid: Pointer): INTEGER;
+PROCEDURE [ccall] TreeGetId*     ["IupTreeGetId"    ] (ih: Handle; userid: Pointer): INTEGER;
+PROCEDURE [ccall] TreeSetAttributeHandle* ["IupTreeSetAttributeHandle"] (ih: Handle; name: String; id: INTEGER; ih_named: Handle);
 
-(* Deprecated IupTree utilities, use Iup*AttributeId functions *)
+(* DEPRECATED IupTree utilities, use Iup*AttributeId functions. It will be removed in a future version. *)
 PROCEDURE [ccall] TreeSetAttribute*   ["IupTreeSetAttribute"  ] (ih: Handle; name: String; id: INTEGER; value: String);      
 PROCEDURE [ccall] TreeStoreAttribute* ["IupTreeStoreAttribute"] (ih: Handle; name: String; id: INTEGER; value: String);       
 PROCEDURE [ccall] TreeGetAttribute*   ["IupTreeGetAttribute"  ] (ih: Handle; name: String; id: INTEGER): String;      
 PROCEDURE [ccall] TreeGetInt*         ["IupTreeGetInt"        ] (ih: Handle; name: String; id: INTEGER): INTEGER;
 PROCEDURE [ccall] TreeGetFloat*       ["IupTreeGetFloat"      ] (ih: Handle; name: String; id: INTEGER): SHORTREAL;  
 (*
-PROCEDURE [ccall] TreeSetfAttribute*      ["IupTreeSetfAttribute"     ] (ih: Handle; name: String; id: INTEGER; format: String; ...);*)
-PROCEDURE [ccall] TreeSetAttributeHandle* ["IupTreeSetAttributeHandle"] (ih: Handle; a: String; id: INTEGER; ih_named: Handle);
+PROCEDURE [ccall] TreeSetfAttribute*  ["IupTreeSetfAttribute" ] (ih: Handle; name: String; id: INTEGER; format: String; ...);*)
+
+(* DEPRECATED callback management. It will be removed in a future version. *)
+PROCEDURE [ccall] GetActionName* ["IupGetActionName"] (): String;
+
+(* DEPRECATED font names. It will be removed in a future version.  *)
+PROCEDURE [ccall] MapFont*    ["IupMapFont"   ] (iupfont:    String): String;
+PROCEDURE [ccall] UnMapFont*  ["IupUnMapFont" ] (driverfont: String): String;
 
 (* PRE-DEFINIDED DIALOGS *)
 
-PROCEDURE [ccall] FileDlg*    ["IupFileDlg"   ] (): Handle;   
-PROCEDURE [ccall] MessageDlg* ["IupMessageDlg"] (): Handle;       
-PROCEDURE [ccall] ColorDlg*   ["IupColorDlg"  ] (): Handle;   
-PROCEDURE [ccall] FontDlg*    ["IupFontDlg"   ] (): Handle;
+PROCEDURE [ccall] FileDlg*     ["IupFileDlg"    ] (): Handle;   
+PROCEDURE [ccall] MessageDlg*  ["IupMessageDlg" ] (): Handle;       
+PROCEDURE [ccall] ColorDlg*    ["IupColorDlg"   ] (): Handle;   
+PROCEDURE [ccall] FontDlg*     ["IupFontDlg"    ] (): Handle;
+PROCEDURE [ccall] ProgressDlg* ["IupProgressDlg"] (): Handle;
 
 PROCEDURE [ccall] GetFile*    ["IupGetFile"   ] (arg: String): INTEGER;    
 PROCEDURE [ccall] Message*    ["IupMessage"   ] (title, msg: String);    
@@ -324,7 +367,7 @@ PROCEDURE [ccall] Alarm*      ["IupAlarm"     ] (title, msg, b1, b2, b3: String)
 PROCEDURE [ccall] Scanf*      ["IupScanf"     ] (format: String, ...): INTEGER;*)
 PROCEDURE [ccall] ListDialog* ["IupListDialog"] (type: INTEGER; title: String; size: INTEGER; list: StringList; op, max_col, max_lin: INTEGER; OUT marks: INTEGER): INTEGER;
 PROCEDURE [ccall] GetText*    ["IupGetText"   ] (title, text: String): INTEGER;    
-PROCEDURE [ccall] GetColor*   ["IupGetColor"  ] (x,y: INTEGER; r, g, b: String): INTEGER;
+PROCEDURE [ccall] GetColor*   ["IupGetColor"  ] (x,y: INTEGER; VAR r, g, b: SHORTCHAR): INTEGER;
 
 (*
 PROCEDURE [ccall] GetParam*  ["IupGetParam"] (title: String; action: Paramcb; user_data: Pointer; format: String; ...): INTEGER;*)
@@ -335,3 +378,26 @@ PROCEDURE [ccall] ElementPropertiesDialog* ["IupElementPropertiesDialog"] (elem:
 
 BEGIN
 END IupLib.
+
+(******************************************************************************
+* Copyright (C) 1994-2014 Tecgraf, PUC-Rio.
+*
+* Permission is hereby granted, free of charge, to any person obtaining
+* a copy of this software and associated documentation files (the
+* "Software"), to deal in the Software without restriction, including
+* without limitation the rights to use, copy, modify, merge, publish,
+* distribute, sublicense, and/or sell copies of the Software, and to
+* permit persons to whom the Software is furnished to do so, subject to
+* the following conditions:
+*
+* The above copyright notice and this permission notice shall be
+* included in all copies or substantial portions of the Software.
+*
+* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+* EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+* MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+* IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+* CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+* TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+* SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+******************************************************************************)
